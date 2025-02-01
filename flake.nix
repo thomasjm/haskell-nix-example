@@ -11,7 +11,7 @@
   outputs = { self, nixpkgs, flake-utils, haskellNix }:
     let
       # choose the compiler you want. For now we use ghc963.
-      compiler-nix-name = "ghc963";
+      compiler-nix-name = "ghc966";
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -91,6 +91,13 @@
             name = "hello";
             version = "1.0.0.2";
           };
+
+          helloPkg-darwin = pkgs.pkgsCross.aarch64-darwin.haskell-nix.hackage-package {
+            inherit compiler-nix-name;
+            name = "hello";
+            version = "1.0.0.2";
+          };
+
           # Or javascript
           helloPkg-javascript = pkgs.pkgsCross.ghcjs.haskell-nix.hackage-package {
             inherit compiler-nix-name;
@@ -103,6 +110,7 @@
             packages.hello-dynamic = helloPkg-dynamic.components.exes.hello;
             packages.hello-mingw = helloPkg-mingw.components.exes.hello;
             packages.hello-ucrt64 = helloPkg-ucrt64.components.exes.hello;
+            packages.hello-darwin = helloPkg-darwin.components.exes.hello;
             packages.hello-javascript = helloPkg-javascript.components.exes.hello;
         };
         # helper function to add `hydraJobs` to the flake output.
